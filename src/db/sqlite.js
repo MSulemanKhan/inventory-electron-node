@@ -61,6 +61,32 @@ db.serialize(() => {
     FOREIGN KEY (product_id) REFERENCES products(id)
   )`);
 
+  // Orders table
+  db.run(`CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_name TEXT,
+    customer_phone TEXT,
+    customer_address TEXT,
+    total REAL NOT NULL,
+    tax REAL DEFAULT 0,
+    discount REAL DEFAULT 0,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  // Order items table
+  db.run(`CREATE TABLE IF NOT EXISTS order_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER NOT NULL,
+    product_id INTEGER,
+    product_name TEXT,
+    quantity INTEGER NOT NULL,
+    unit_price REAL NOT NULL,
+    total_price REAL NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+  )`);
+
   console.log("Database tables initialized successfully");
 });
 
