@@ -16,6 +16,7 @@ const categoriesRoutes = require("./routes/categories.routes");
 const suppliersRoutes = require("./routes/suppliers.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const ordersRoutes = require("./routes/orders.routes");
+const backupRoutes = require("./routes/backup.routes");
 
 app.use("/api/products", productsRoutes);
 app.use("/api/brands", brandsRoutes);
@@ -23,6 +24,7 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/suppliers", suppliersRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/orders", ordersRoutes);
+app.use("/api/backup", backupRoutes);
 
 // Health check
 app.get("/api/ping", (req, res) => {
