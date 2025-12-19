@@ -1,0 +1,21 @@
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
