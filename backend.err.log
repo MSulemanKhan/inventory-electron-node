@@ -19,3 +19,602 @@ Rename failed when restoring DB, will save uploaded backup to backups/ folder: [
   path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
   dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
 }
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766165828034.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766165880513.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766165894712.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766165927697.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166020134.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166219173.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166320247.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166351062.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166360474.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166368417.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166396911.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166433323.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166472995.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transaction within a transaction
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166510162.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166542048.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
+Rename failed when restoring DB, will save uploaded backup to backups/ folder: [Error: EPERM: operation not permitted, rename 'C:\inv-electron\inventory-app-backend\inventory.db.restore.tmp' -> 'C:\inv-electron\inventory-app-backend\inventory.db'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\inv-electron\\inventory-app-backend\\inventory.db.restore.tmp',
+  dest: 'C:\\inv-electron\\inventory-app-backend\\inventory.db'
+}
+Failed to import backup into live DB: Error: SQLITE_ERROR: database src is locked
+--> in Database#exec('PRAGMA foreign_keys = OFF;\n' +
+  'BEGIN TRANSACTION;\n' +
+  "ATTACH DATABASE 'C:\\\\inv-electron\\\\inventory-app-backend\\\\backups\\\\restored-1766166686515.db' AS src;\n" +
+  'DELETE FROM brands;\n' +
+  'INSERT INTO brands SELECT * FROM src.brands;\n' +
+  'DELETE FROM categories;\n' +
+  'INSERT INTO categories SELECT * FROM src.categories;\n' +
+  'DELETE FROM suppliers;\n' +
+  'INSERT INTO suppliers SELECT * FROM src.suppliers;\n' +
+  'DELETE FROM products;\n' +
+  'INSERT INTO products SELECT * FROM src.products;\n' +
+  'DELETE FROM inventory_transactions;\n' +
+  'INSERT INTO inventory_transactions SELECT * FROM src.inventory_transactions;\n' +
+  'DELETE FROM orders;\n' +
+  'INSERT INTO orders SELECT * FROM src.orders;\n' +
+  'DELETE FROM order_items;\n' +
+  'INSERT INTO order_items SELECT * FROM src.order_items;\n' +
+  'DELETE FROM sqlite_sequence;\n' +
+  'INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n' +
+  'DETACH DATABASE src;\n' +
+  'COMMIT;\n' +
+  'PRAGMA foreign_keys = ON;\n', [Function (anonymous)])
+    at importBackupFile (C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:78:20)
+    at C:\inv-electron\inventory-app-backend\src\routes\backup.routes.js:84:15
+    at FSReqCallback.oncomplete (node:fs:190:23) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}

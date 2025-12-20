@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const db = require('../db/sqlite');
 
 // Helper to generate filename
 function backupFilename() {
@@ -54,7 +55,39 @@ router.post('/restore', express.raw({ type: 'application/octet-stream', limit: '
               }
               // Remove temp file if it still exists
               try { if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath); } catch (e) { /* ignore */ }
-              return res.status(200).send({ message: `Backup uploaded and saved to ${path.relative(process.cwd(), savedPath)}. To apply it, stop the backend and replace inventory.db with this file, then restart the app.`, savedPath });
+              // Attempt to import data from the saved DB into the live DB (avoids replacing the file while locked)
+              function importBackupFile(uploadedPath, cb) {
+                const attachPath = uploadedPath.replace(/\\/g, "\\\\");
+                // Tables to copy (in order that reduces FK issues)
+                const tables = [
+                  'brands', 'categories', 'suppliers',
+                  'products', 'inventory_transactions', 'orders', 'order_items'
+                ];
+                // Build SQL to attach and copy tables
+                let stmts = "PRAGMA foreign_keys = OFF;\nBEGIN TRANSACTION;\n";
+                stmts += `ATTACH DATABASE '${attachPath}' AS src;\n`;
+                tables.forEach(t => {
+                  stmts += `DELETE FROM ${t};\n`;
+                  stmts += `INSERT INTO ${t} SELECT * FROM src.${t};\n`;
+                });
+                // copy sqlite_sequence if present to preserve AUTOINCREMENT values
+                stmts += `DELETE FROM sqlite_sequence;\n`;
+                stmts += `INSERT OR REPLACE INTO sqlite_sequence SELECT * FROM src.sqlite_sequence;\n`;
+                stmts += `DETACH DATABASE src;\nCOMMIT;\nPRAGMA foreign_keys = ON;\n`;
+
+                db.exec(stmts, (importErr) => {
+                  if (importErr) return cb(importErr);
+                  return cb(null);
+                });
+              }
+
+              importBackupFile(savedPath, (importErr) => {
+                if (importErr) {
+                  console.error('Failed to import backup into live DB:', importErr);
+                  return res.status(200).send({ message: `Backup uploaded and saved to ${path.relative(process.cwd(), savedPath)} but automatic import failed. To apply it, stop the backend and replace inventory.db with this file, then restart the app.`, savedPath, importError: String(importErr.message || importErr) });
+                }
+                return res.status(200).send({ message: `Backup uploaded, saved to ${path.relative(process.cwd(), savedPath)} and imported into the live database. Restarting is not required for data to appear.`, savedPath });
+              });
             });
           } catch (e) {
             console.error('Unexpected error during restore fallback:', e);
