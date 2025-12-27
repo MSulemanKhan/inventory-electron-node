@@ -37,11 +37,11 @@ router.get("/:id", (req, res) => {
 
 // Add product
 router.post("/", (req, res) => {
-  const { name, sku, description, quantity, price, cost, brand_id, category_id, supplier_id, reorder_level, unit } = req.body;
-  const query = `INSERT INTO products(name, sku, description, quantity, price, cost, brand_id, category_id, supplier_id, reorder_level, unit) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const { name, sku, description, quantity, price, discount = 0, cost, brand_id, category_id, supplier_id, reorder_level, unit } = req.body;
+  const query = `INSERT INTO products(name, sku, description, quantity, price, discount, cost, brand_id, category_id, supplier_id, reorder_level, unit) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   
-  db.run(query, [name, sku, description, quantity || 0, price, cost, brand_id, category_id, supplier_id, reorder_level || 10, unit || 'pcs'],
+  db.run(query, [name, sku, description, quantity || 0, price, discount || 0, cost, brand_id, category_id, supplier_id, reorder_level || 10, unit || 'pcs'],
     function(err) {
       if (err) res.status(500).send(err);
       else res.send({ id: this.lastID, message: "Product created successfully" });
@@ -50,14 +50,14 @@ router.post("/", (req, res) => {
 
 // Update product
 router.put("/:id", (req, res) => {
-  const { name, sku, description, quantity, price, cost, brand_id, category_id, supplier_id, reorder_level, unit } = req.body;
+  const { name, sku, description, quantity, price, discount = 0, cost, brand_id, category_id, supplier_id, reorder_level, unit } = req.body;
   const query = `UPDATE products 
-                 SET name = ?, sku = ?, description = ?, quantity = ?, price = ?, cost = ?, 
+                 SET name = ?, sku = ?, description = ?, quantity = ?, price = ?, discount = ?, cost = ?, 
                      brand_id = ?, category_id = ?, supplier_id = ?, reorder_level = ?, unit = ?,
                      updated_at = CURRENT_TIMESTAMP
                  WHERE id = ?`;
   
-  db.run(query, [name, sku, description, quantity, price, cost, brand_id, category_id, supplier_id, reorder_level, unit, req.params.id],
+  db.run(query, [name, sku, description, quantity, price, discount || 0, cost, brand_id, category_id, supplier_id, reorder_level, unit, req.params.id],
     function(err) {
       if (err) res.status(500).send(err);
       else if (this.changes === 0) res.status(404).send({ error: "Product not found" });

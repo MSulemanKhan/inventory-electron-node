@@ -37,6 +37,7 @@ db.serialize(() => {
     description TEXT,
     quantity INTEGER DEFAULT 0,
     price REAL NOT NULL,
+    discount REAL DEFAULT 0,
     cost REAL,
     brand_id INTEGER,
     category_id INTEGER,
@@ -49,6 +50,20 @@ db.serialize(() => {
     FOREIGN KEY (category_id) REFERENCES categories(id),
     FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
   )`);
+
+  // ensure discount column exists for existing DBs
+  db.all(`PRAGMA table_info(products)`, [], (err, cols) => {
+    if (!err && Array.isArray(cols)) {
+      const hasDiscount = cols.some(c => c.name === 'discount');
+      if (!hasDiscount) {
+        try {
+          db.run(`ALTER TABLE products ADD COLUMN discount REAL DEFAULT 0`);
+        } catch (e) {
+          console.warn('Could not add discount column:', e && e.message);
+        }
+      }
+    }
+  });
 
   // Inventory transactions table
   db.run(`CREATE TABLE IF NOT EXISTS inventory_transactions (
@@ -82,10 +97,25 @@ db.serialize(() => {
     product_name TEXT,
     quantity INTEGER NOT NULL,
     unit_price REAL NOT NULL,
+    discount REAL DEFAULT 0,
     total_price REAL NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
   )`);
+
+  // ensure discount column exists on order_items for existing DBs
+  db.all(`PRAGMA table_info(order_items)`, [], (err, cols) => {
+    if (!err && Array.isArray(cols)) {
+      const hasDiscount = cols.some(c => c.name === 'discount');
+      if (!hasDiscount) {
+        try {
+          db.run(`ALTER TABLE order_items ADD COLUMN discount REAL DEFAULT 0`);
+        } catch (e) {
+          console.warn('Could not add discount column to order_items:', e && e.message);
+        }
+      }
+    }
+  });
 
   console.log("Database tables initialized successfully");
 });

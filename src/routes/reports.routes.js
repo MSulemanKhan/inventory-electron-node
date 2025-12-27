@@ -29,7 +29,7 @@ router.get('/inventory/pdf', (req, res) => {
     doc.moveDown();
     // metrics
     const totalQty = rows.reduce((s, r) => s + (r.quantity || 0), 0);
-    const totalValue = rows.reduce((s, r) => s + ((r.quantity || 0) * (r.price || 0)), 0);
+    const totalValue = rows.reduce((s, r) => s + ((r.quantity || 0) * ((r.price || 0) - (r.discount || 0))), 0);
 
     doc.fontSize(10).fillColor('#374151').font('Helvetica');
     doc.text(`Total Items: ${totalQty}`, { continued: true }).text(`   Stock Value: ${totalValue.toFixed(2)}`);
@@ -125,7 +125,7 @@ router.get('/sales/pdf', (req, res) => {
 });
 
 router.get('/suppliers/pdf', (req, res) => {
-  db.all('SELECT s.*, COUNT(p.id) as product_count, SUM(p.quantity * p.price) as total_value FROM suppliers s LEFT JOIN products p ON p.supplier_id = s.id GROUP BY s.id', [], (err, rows) => {
+  db.all('SELECT s.*, COUNT(p.id) as product_count, SUM(p.quantity * (p.price - COALESCE(p.discount,0))) as total_value FROM suppliers s LEFT JOIN products p ON p.supplier_id = s.id GROUP BY s.id', [], (err, rows) => {
     if (err) return res.status(500).send({ error: 'Failed to load suppliers', details: err.message });
 
     const doc = new PDFDocument({ size: 'A4', margin: 40 });

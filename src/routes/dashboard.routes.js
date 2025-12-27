@@ -31,8 +31,8 @@ router.get("/stats", (req, res) => {
             if (err) return res.status(500).send(err);
             stats.lowStockItems = row.count;
             
-            // Get total inventory value
-            db.get("SELECT SUM(quantity * price) as value FROM products", [], (err, row) => {
+            // Get total inventory value (consider product discount)
+            db.get("SELECT SUM(quantity * (price - COALESCE(discount,0))) as value FROM products", [], (err, row) => {
               if (err) return res.status(500).send(err);
               stats.totalInventoryValue = row.value || 0;
               

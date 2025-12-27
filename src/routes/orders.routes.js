@@ -40,9 +40,10 @@ function generateInvoicePdf(order, items, res) {
 
   // Table header
   const colItem = startX + 0;
-  const colQty = startX + Math.round(pageWidth * 0.65);
-  const colUnit = startX + Math.round(pageWidth * 0.78);
-  const colTotal = startX + Math.round(pageWidth * 0.88);
+  const colQty = startX + Math.round(pageWidth * 0.6);
+  const colUnit = startX + Math.round(pageWidth * 0.75);
+  const colDiscount = startX + Math.round(pageWidth * 0.86);
+  const colTotal = startX + Math.round(pageWidth * 0.94);
 
   // Header background
   doc.rect(startX, y, pageWidth, 28).fill('#2c3e50');
@@ -50,6 +51,7 @@ function generateInvoicePdf(order, items, res) {
   doc.text('Item', colItem + 6, y + 8, { width: colQty - colItem - 12 });
   doc.text('Qty', colQty + 6, y + 8);
   doc.text('Unit', colUnit + 6, y + 8);
+  doc.text('Disc', colDiscount + 6, y + 8);
   doc.text('Total', colTotal + 6, y + 8);
 
   y += 28;
@@ -68,6 +70,7 @@ function generateInvoicePdf(order, items, res) {
     doc.text(it.product_name, colItem + 6, rowTop + 6, { width: colQty - colItem - 12 });
     doc.text((it.quantity || 0).toString(), colQty + 6, rowTop + 6);
     doc.text((it.unit_price || 0).toFixed(2), colUnit + 6, rowTop + 6);
+    doc.text(((it.discount || 0)).toFixed(2), colDiscount + 6, rowTop + 6);
     doc.text((it.total_price || 0).toFixed(2), colTotal + 6, rowTop + 6);
     subtotal += (it.total_price || 0);
     rowIndex++;
@@ -82,13 +85,13 @@ function generateInvoicePdf(order, items, res) {
   // Totals block
   const totalsTop = y + rowIndex * rowHeight + 12;
   doc.font('Helvetica').fontSize(10).fillColor('#374151');
-  doc.text(`Subtotal:`, colUnit, totalsTop, { width: 140, align: 'left' });
+  doc.text(`Subtotal:`, colDiscount, totalsTop, { width: 140, align: 'left' });
   doc.text(subtotal.toFixed(2), colTotal + 6, totalsTop, { align: 'right' });
 
-  doc.text(`Discount:`, colUnit, totalsTop + 16, { width: 140, align: 'left' });
+  doc.text(`Discount:`, colDiscount, totalsTop + 16, { width: 140, align: 'left' });
   doc.text(((order.discount || 0)).toFixed(2), colTotal + 6, totalsTop + 16, { align: 'right' });
 
-  doc.text(`Tax:`, colUnit, totalsTop + 32, { width: 140, align: 'left' });
+  doc.text(`Tax:`, colDiscount, totalsTop + 32, { width: 140, align: 'left' });
   doc.text(((order.tax || 0)).toFixed(2), colTotal + 6, totalsTop + 32, { align: 'right' });
 
   doc.font('Helvetica-Bold').fontSize(12).fillColor('#111827');
@@ -109,39 +112,72 @@ router.post("/", (req, res) => {
     return res.status(400).send({ error: "Order must contain at least one item" });
   }
 
-  // compute totals
-  let subtotal = 0;
-  items.forEach(it => {
-    subtotal += (it.quantity || 0) * (it.unit_price || 0);
-  });
-  const total = subtotal - (discount || 0) + (tax || 0);
-
+  // Insert order first (total will be finalized after items processed)
+  const placeholderTotal = 0;
   const insertOrderQuery = `INSERT INTO orders(customer_name, customer_phone, customer_address, total, tax, discount) VALUES (?, ?, ?, ?, ?, ?)`;
-  db.run(insertOrderQuery, [customer_name, customer_phone, customer_address, total, tax, discount], function(err) {
+  db.run(insertOrderQuery, [customer_name, customer_phone, customer_address, placeholderTotal, tax, discount], function(err) {
     if (err) return res.status(500).send(err);
     const orderId = this.lastID;
 
-    // insert items sequentially
-    const insertItem = db.prepare(`INSERT INTO order_items(order_id, product_id, product_name, quantity, unit_price, total_price) VALUES (?, ?, ?, ?, ?, ?)`);
+    // prepare item insert and process items sequentially so we can compute server-side pricing (considering product discount)
+    const insertItem = db.prepare(`INSERT INTO order_items(order_id, product_id, product_name, quantity, unit_price, discount, total_price) VALUES (?, ?, ?, ?, ?, ?, ?)`);
+    let subtotal = 0;
 
-    items.forEach((it) => {
-      const prodId = it.product_id || null;
-      const prodName = it.product_name || it.name || '';
-      const qty = it.quantity || 0;
-      const unitPrice = it.unit_price || 0;
-      const totalPrice = qty * unitPrice;
-      insertItem.run([orderId, prodId, prodName, qty, unitPrice, totalPrice]);
-
-      // decrement product stock if product_id provided
-      if (prodId) {
-        db.run(`UPDATE products SET quantity = quantity - ? WHERE id = ?`, [qty, prodId]);
+    const processNext = (idx) => {
+      if (idx >= items.length) {
+        insertItem.finalize((fErr) => {
+          if (fErr) return res.status(500).send(fErr);
+          const finalTotal = subtotal - (discount || 0) + (tax || 0);
+          db.run('UPDATE orders SET total = ? WHERE id = ?', [finalTotal, orderId], (uErr) => {
+            if (uErr) return res.status(500).send(uErr);
+            res.send({ id: orderId, message: 'Order created successfully' });
+          });
+        });
+        return;
       }
-    });
 
-    insertItem.finalize((fErr) => {
-      if (fErr) return res.status(500).send(fErr);
-      res.send({ id: orderId, message: 'Order created successfully' });
-    });
+      const it = items[idx];
+      const prodId = it.product_id || null;
+      const qty = it.quantity || 0;
+
+      if (prodId) {
+        // fetch product to consider its discount when computing unit price
+        db.get('SELECT price, discount, name FROM products WHERE id = ?', [prodId], (pErr, prod) => {
+          if (pErr) {
+            // skip this item on error
+            return processNext(idx + 1);
+          }
+          const basePrice = (prod && prod.price) ? prod.price : 0;
+          const prodDiscount = (prod && prod.discount) ? prod.discount : 0;
+          const itemDiscount = (typeof it.discount === 'number') ? it.discount : prodDiscount;
+          let unitPrice = (typeof it.unit_price === 'number' && it.unit_price > 0) ? it.unit_price : Math.max(0, basePrice - (itemDiscount || 0));
+          unitPrice = Math.max(0, unitPrice);
+          const totalPrice = qty * unitPrice;
+          subtotal += totalPrice;
+          const prodName = it.product_name || (prod && prod.name) || '';
+          insertItem.run([orderId, prodId, prodName, qty, unitPrice, itemDiscount || 0, totalPrice], (iErr) => {
+            if (iErr) console.error('Failed insert item', iErr);
+            // decrement product stock
+            db.run(`UPDATE products SET quantity = quantity - ? WHERE id = ?`, [qty, prodId], () => {
+              processNext(idx + 1);
+            });
+          });
+        });
+      } else {
+        const itemDiscount = (typeof it.discount === 'number') ? it.discount : 0;
+        const basePrice = (typeof it.unit_price === 'number') ? it.unit_price : 0;
+        const unitPrice = Math.max(0, basePrice - (itemDiscount || 0));
+        const totalPrice = qty * unitPrice;
+        subtotal += totalPrice;
+        const prodName = it.product_name || it.name || '';
+        insertItem.run([orderId, null, prodName, qty, unitPrice, itemDiscount || 0, totalPrice], (iErr) => {
+          if (iErr) console.error('Failed insert item', iErr);
+          processNext(idx + 1);
+        });
+      }
+    };
+
+    processNext(0);
   });
 });
 
