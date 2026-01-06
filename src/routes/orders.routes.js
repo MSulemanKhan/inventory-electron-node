@@ -2,6 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/sqlite");
 const PDFDocument = require('pdfkit');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const { parse } = require('csv-parse/sync');
+const xlsx = require('xlsx');
+const upload = multer({ dest: path.join(__dirname, '../../uploads') });
 
 function generateInvoicePdf(order, items, res) {
   const doc = new PDFDocument({ size: 'A4', margin: 40 });
@@ -187,6 +193,116 @@ router.get("/", (req, res) => {
   db.all(q, [], (err, rows) => {
     if (err) res.status(500).send(err);
     else res.send(rows);
+  });
+});
+
+// Export orders (with items as JSON string column)
+router.get('/export', (req, res) => {
+  const format = (req.query.format || 'csv').toString().toLowerCase();
+  const q = `SELECT o.*, (SELECT json_group_array(json_object('product_id', oi.product_id, 'product_name', oi.product_name, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'discount', oi.discount, 'total_price', oi.total_price)) FROM order_items oi WHERE oi.order_id = o.id) as items_json FROM orders o ORDER BY o.created_at DESC`;
+  db.all(q, [], (err, rows) => {
+    if (err) return res.status(500).send(err);
+    // parse items_json from null->''
+    rows = rows.map(r => ({ ...r, items: r.items_json ? JSON.parse(r.items_json) : [] }));
+    if (format === 'xlsx') {
+      const ws = xlsx.utils.json_to_sheet(rows);
+      const wb = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(wb, ws, 'Orders');
+      const buf = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
+      res.setHeader('Content-Disposition', 'attachment; filename="orders.xlsx"');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      return res.send(buf);
+    }
+    const headers = Object.keys(rows[0] || { id: 'ID', customer_name: 'Customer', total: 'Total', created_at: 'Date', status: 'Status', items: 'Items' });
+    const csvRows = [headers.join(',')];
+    for (const r of rows) {
+      const line = headers.map(h => {
+        let v = r[h];
+        if (h === 'items') v = JSON.stringify(r.items || []);
+        if (v === null || v === undefined) v = '';
+        if (typeof v === 'string' && v.includes(',')) v = '"' + v.replace(/"/g, '""') + '"';
+        return v;
+      }).join(',');
+      csvRows.push(line);
+    }
+    res.setHeader('Content-Disposition', 'attachment; filename="orders.csv"');
+    res.setHeader('Content-Type', 'text/csv');
+    res.send(csvRows.join('\n'));
+  });
+});
+
+// Import orders (expect items column as JSON string or empty)
+router.post('/import', upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).send({ error: 'File is required' });
+  const filePath = req.file.path;
+  const ext = path.extname(req.file.originalname).toLowerCase();
+  try {
+    let records = [];
+    if (ext === '.xlsx' || ext === '.xls') {
+      const workbook = xlsx.readFile(filePath);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      records = xlsx.utils.sheet_to_json(sheet, { defval: '' });
+    } else {
+      const raw = fs.readFileSync(filePath, 'utf8');
+      records = parse(raw, { columns: true, skip_empty_lines: true });
+    }
+    const results = { created: 0, errors: 0 };
+    const tasks = records.map(row => (done) => {
+      const customer_name = row.customer_name || row.Customer || '';
+      const customer_phone = row.customer_phone || row.Phone || '';
+      const customer_address = row.customer_address || row.Address || '';
+      const tax = Number(row.tax || 0) || 0;
+      const discount = Number(row.discount || 0) || 0;
+      let items = [];
+      try { items = row.items ? (typeof row.items === 'string' ? JSON.parse(row.items) : row.items) : []; } catch (e) { items = []; }
+      // insert order then items
+      db.run('INSERT INTO orders(customer_name, customer_phone, customer_address, total, tax, discount) VALUES (?,?,?,?,?,?)', [customer_name, customer_phone, customer_address, 0, tax, discount], function(err) {
+        if (err) { results.errors++; return done(err); }
+        const orderId = this.lastID;
+        const insertItem = db.prepare('INSERT INTO order_items(order_id, product_id, product_name, quantity, unit_price, discount, total_price) VALUES (?,?,?,?,?,?,?)');
+        let subtotal = 0;
+        const itTasks = (items || []).map(it => (nxt) => {
+          const prodId = it.product_id || null;
+          const qty = Number(it.quantity || 0) || 0;
+          const unit_price = Number(it.unit_price || 0) || 0;
+          const disc = Number(it.discount || 0) || 0;
+          const total_price = Number(it.total_price || (qty * unit_price)) || 0;
+          subtotal += total_price;
+          insertItem.run([orderId, prodId, it.product_name || it.name || '', qty, unit_price, disc, total_price], () => nxt());
+        });
+        (function runI(i) {
+          if (i >= itTasks.length) {
+            insertItem.finalize(() => {
+              // If items failed to parse or subtotal is zero but the row provides a total, prefer that total.
+              let finalTotal = subtotal;
+              if ((!finalTotal || finalTotal === 0) && row.total) {
+                finalTotal = Number(row.total) || 0;
+              }
+              finalTotal = finalTotal - discount + tax;
+              db.run('UPDATE orders SET total = ? WHERE id = ?', [finalTotal, orderId], (uErr) => {
+                if (uErr) console.error('Failed finalize order', uErr);
+                results.created++;
+                return done(null);
+              });
+            });
+            return;
+          }
+          itTasks[i](() => runI(i+1));
+        })(0);
+      });
+    });
+    (function runNext(i) { if (i >= tasks.length) { try { fs.unlinkSync(filePath); } catch (e) {} return res.send(results); } tasks[i]((err) => { if (err) console.error('Import order row error', err && err.message); runNext(i+1); }); })(0);
+  } catch (e) { try { fs.unlinkSync(filePath); } catch (er) {} return res.status(500).send({ error: e.message || 'Import failed' }); }
+});
+
+// Delete all orders and order items
+router.delete('/delete-all', (req, res) => {
+  db.run('DELETE FROM order_items', [], function(err) {
+    if (err) return res.status(500).send(err);
+    db.run('DELETE FROM orders', [], function(err2) {
+      if (err2) return res.status(500).send(err2);
+      res.send({ message: 'All orders and items deleted' });
+    });
   });
 });
 

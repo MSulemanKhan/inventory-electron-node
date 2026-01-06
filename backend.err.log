@@ -914,3 +914,39 @@ Failed to import backup into live DB: Error: SQLITE_ERROR: cannot start a transa
   code: 'SQLITE_ERROR',
   __augmented: true
 }
+node:_http_outgoing:700
+    throw new ERR_HTTP_HEADERS_SENT('set');
+          ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:700:11)
+    at ServerResponse.header (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:686:10)
+    at ServerResponse.send (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:163:12)
+    at ServerResponse.json (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:252:15)
+    at ServerResponse.send (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:151:21)
+    at runNext (C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:295:110)
+    at C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:295:217
+    at Statement.<anonymous> (C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:273:267)
+    at Statement.replacement (C:\inv-electron\inventory-app-backend\node_modules\sqlite3\lib\trace.js:25:27) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+
+Node.js v22.21.1
+node:_http_outgoing:700
+    throw new ERR_HTTP_HEADERS_SENT('set');
+          ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:700:11)
+    at ServerResponse.header (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:686:10)
+    at ServerResponse.send (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:163:12)
+    at ServerResponse.json (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:252:15)
+    at ServerResponse.send (C:\inv-electron\inventory-app-backend\node_modules\express\lib\response.js:151:21)
+    at runNext (C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:295:110)
+    at C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:295:217
+    at Statement.<anonymous> (C:\inv-electron\inventory-app-backend\src\routes\orders.routes.js:273:267)
+    at Statement.replacement (C:\inv-electron\inventory-app-backend\node_modules\sqlite3\lib\trace.js:25:27) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+
+Node.js v22.21.1
